@@ -1,37 +1,30 @@
-let holes = document.querySelectorAll(".hole");
+let holes = document.querySelectorAll('.hole');
+let lastHole;
+const TIME = 1500;
 
-//Старт игры
+const addActiveHole = () => {
+  const randomIndex = Math.floor(Math.random() * holes.length);
+  const activeHole = holes[randomIndex];
 
-function startTheGame() {
+  if (activeHole === lastHole) {
+    return addActiveHole();
+  }
 
-  // Получить рандомную нору
+  lastHole = activeHole;
+  activeHole.classList.add('hole_has-devil');
+}
 
-  function getHole() {
-    const randomIndex = Math.floor(Math.random() * (holes.length - 1));
-    return holes[randomIndex];
-  };
+const removeActiveHole = () => {
+  holes.forEach(item => item.classList.remove('hole_has-devil'));
+}
 
-  let hole = getHole();
+const changeActiveHole = () => {
+  removeActiveHole();
+  addActiveHole();
+}
 
-  // Сделать ее активной
+addActiveHole();
 
-  function activateHole() {
-    hole.classList.add('hole_has-devil');
-  };
-
-  activateHole();
-  console.log(hole)
-
-  // Через таймаут сделать ее не активной и запустить заново игру
-
-  setTimeout(() => {
-    function deactivateHole() {
-      hole.classList.remove('hole_has-devil');
-      console.log(hole);
-    };
-    deactivateHole();
-    startTheGame();
-  }, 800);
-};
-
-startTheGame();
+setInterval(() => {
+  changeActiveHole();
+}, TIME);
